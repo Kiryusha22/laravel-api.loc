@@ -1,0 +1,24 @@
+<?php
+
+namespace App\Exceptions\Api;
+
+use Exception;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Symfony\Component\HttpFoundation\Response;
+use Throwable;
+
+class ApiException extends HttpResponseException
+{
+    public function __construct(string $message = "", int $code = 500, array $errors = []) {
+        $response = [
+            'message' => $message,
+            'code' => $code,
+        ];
+        if(!empty($errors)) {
+            $response['errors'] = $errors;
+        }
+
+        parent::__construct(response()->json($response)->setStatusCode($code));
+    }
+
+}
